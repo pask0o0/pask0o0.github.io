@@ -2,7 +2,7 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8">
-  <title>IsolarCloud + YouTube Prezentacija</title>
+  <title>IsolarCloud + YouTube Loop</title>
   <style>
     body, html {
       margin: 0;
@@ -10,9 +10,6 @@
       height: 100%;
       background: black;
       overflow: hidden;
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
     }
     iframe {
       width: 100%;
@@ -29,40 +26,26 @@
       opacity: 1;
       pointer-events: auto;
     }
-    #startButton {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2rem;
-      padding: 20px 40px;
-      background-color: #28a745;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 10;
-    }
   </style>
 </head>
 <body>
 
-<!-- Gumb za početak petlje -->
-<button id="startButton">✅ Logiran sam, pokreni prezentaciju!</button>
-
-<!-- Iframe za IsolarCloud -->
+<!-- Iframe za overview stranicu -->
 <iframe id="iframeWeb" src=""></iframe>
 
-<!-- Iframe za YouTube -->
+<!-- Iframe za YouTube video -->
 <iframe id="youtubePlayer" src="" allow="autoplay; fullscreen"></iframe>
 
 <script>
 const iframeWeb = document.getElementById('iframeWeb');
 const youtubePlayer = document.getElementById('youtubePlayer');
-const startButton = document.getElementById('startButton');
 
 // URL-ovi
 const loginURL = "https://isolarcloud.com/#/login";
-const plantOverviewURL = "https://web3.isolarcloud.eu/#/plantDetail/overView?DHs9/Dq9q5mIsn8SXUbgAVKGzI9Dkwky0u7OofkIB2pCW6nJaN6/rU+67jQaGbAXczqyfkX+zf2W0UAi/djhyLGaoxyDzH2b6NDu+3osDB14cKfOoJRb2NmF824REHAe";
+const overviewURL = "https://web3.isolarcloud.eu/#/plantDetail/overView?DHs9/Dq9q5mIsn8SXUbgAVKGzI9Dkwky0u7OofkIB2pCW6nJaN6/rU+67jQaGbAXczqyfkX+zf2W0UAi/djhyLGaoxyDzH2b6NDu+3osDB14cKfOoJRb2NmF824REHAe";
+const youtubeURL = "https://www.youtube.com/embed/NjsWXKeq-LE?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NjsWXKeq-LE";
+
+let loopStarted = false;
 
 // Fullscreen funkcija
 function openFullscreen() {
@@ -76,38 +59,48 @@ function openFullscreen() {
   }
 }
 
-// Loop funkcije
+// Funkcija za prikaz overview stranice
 function prikaziStranicu() {
-  console.log("Prikazujem IsolarCloud overview...");
+  console.log("Prikazujem overview...");
   youtubePlayer.classList.remove("show");
   iframeWeb.classList.add("show");
 
-  setTimeout(prikaziVideo, 15000); // 15 sekundi prikaz overview stranice
+  setTimeout(prikaziVideo, 15000); // 15 sekundi overview
 }
 
+// Funkcija za prikaz videa
 function prikaziVideo() {
-  console.log("Prikazujem YouTube video...");
+  console.log("Prikazujem video...");
   iframeWeb.classList.remove("show");
   youtubePlayer.classList.add("show");
 
   setTimeout(prikaziStranicu, 161000); // 2 min 41 sek video
 }
 
-// Kad klikneš na gumb
-startButton.onclick = () => {
-  startButton.style.display = 'none'; // Sakrij gumb
-  openFullscreen();
-  iframeWeb.src = plantOverviewURL; // Prebaci iframe na overview stranicu
-  youtubePlayer.src = "https://www.youtube.com/embed/NjsWXKeq-LE?autoplay=1&mute=1&controls=0&showinfo=0&modestbranding=1&rel=0&loop=1&playlist=NjsWXKeq-LE";
+// Start loop nakon logina
+function startLoop() {
+  iframeWeb.src = overviewURL;
+  youtubePlayer.src = youtubeURL;
   prikaziStranicu();
-};
+}
 
 // Kada se stranica učita
 window.onload = () => {
-  // Otvori IsolarCloud login u novom tabu
+  openFullscreen();
+  
+  // Otvori login stranicu u novom tabu
   window.open(loginURL, "_blank");
+  
+  // U iframe odmah postavi overview stranicu
+  iframeWeb.src = overviewURL;
+  
+  // Čekaj 15 sekundi da se login odradi
+  setTimeout(() => {
+    startLoop();
+  }, 15000);
 };
 </script>
 
 </body>
 </html>
+

@@ -10,6 +10,9 @@
       height: 100%;
       background: black;
       overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
     }
     iframe {
       width: 100%;
@@ -26,9 +29,25 @@
       opacity: 1;
       pointer-events: auto;
     }
+    #startButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      padding: 20px 40px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
+
+<!-- Gumb za početak odmah -->
+<button id="startButton">✅ Logiran sam, pokreni prezentaciju!</button>
 
 <!-- Iframe za overview stranicu -->
 <iframe id="iframeWeb" src=""></iframe>
@@ -39,8 +58,9 @@
 <script>
 const iframeWeb = document.getElementById('iframeWeb');
 const youtubePlayer = document.getElementById('youtubePlayer');
+const startButton = document.getElementById('startButton');
 
-// Ispravni URL-ovi
+// URL-ovi
 const loginURL = "https://web3.isolarcloud.eu/#/login";
 const overviewURL = "https://web3.isolarcloud.eu/#/plantDetail/overView?DHs9/Dq9q5mIsn8SXUbgAVKGzI9Dkwky0u7OofkIB2pCW6nJaN6/rU+67jQaGbAXczqyfkX+zf2W0UAi/djhyLGaoxyDzH2b6NDu+3osDB14cKfOoJRb2NmF824REHAe";
 const youtubeURL = "https://www.youtube.com/embed/NjsWXKeq-LE?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NjsWXKeq-LE";
@@ -68,17 +88,21 @@ function prikaziStranicu() {
   setTimeout(prikaziVideo, 15000); // 15 sekundi overview
 }
 
-// Funkcija za prikaz YouTube videa
+// Funkcija za prikaz videa
 function prikaziVideo() {
-  console.log("Prikazujem YouTube video...");
+  console.log("Prikazujem video...");
   iframeWeb.classList.remove("show");
   youtubePlayer.classList.add("show");
 
   setTimeout(prikaziStranicu, 161000); // 2 min 41 sek video
 }
 
-// Start loop nakon logina
+// Start loop
 function startLoop() {
+  if (loopStarted) return;
+  loopStarted = true;
+
+  startButton.style.display = 'none'; // Sakrij gumb
   iframeWeb.src = overviewURL;
   youtubePlayer.src = youtubeURL;
   prikaziStranicu();
@@ -91,17 +115,23 @@ window.onload = () => {
   // Otvori login stranicu u novom tabu
   window.open(loginURL, "_blank");
   
-  // U iframe odmah postavi overview stranicu
+  // U iframe odmah postavi overview
   iframeWeb.src = overviewURL;
-  
-  // Čekaj 15 sekundi da korisnik odradi login i automatski prebaci
+
+  // Postavi timeout za automatsko pokretanje nakon 2 minute (120000 ms)
   setTimeout(() => {
     startLoop();
-  }, 15000);
+  }, 120000);
+};
+
+// Ako korisnik klikne na gumb
+startButton.onclick = () => {
+  startLoop();
 };
 </script>
 
 </body>
 </html>
+
 
 

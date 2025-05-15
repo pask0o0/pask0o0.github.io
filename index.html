@@ -21,13 +21,13 @@
       position: absolute;
       top: 0;
       left: 0;
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-    iframe.show {
       opacity: 1;
       pointer-events: auto;
+      transition: opacity 1s ease;
+    }
+    iframe.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
     #startButton {
       position: absolute;
@@ -46,14 +46,14 @@
 </head>
 <body>
 
-<!-- Gumb za početak odmah -->
+<!-- Gumb za početak prezentacije -->
 <button id="startButton">✅ Logiran sam, pokreni prezentaciju!</button>
 
-<!-- Iframe za overview stranicu -->
+<!-- Iframe za prikaz login / overview -->
 <iframe id="iframeWeb" src=""></iframe>
 
-<!-- Iframe za YouTube video -->
-<iframe id="youtubePlayer" src="" allow="autoplay; fullscreen"></iframe>
+<!-- Iframe za prikaz YouTube videa -->
+<iframe id="youtubePlayer" src="" class="hidden" allow="autoplay; fullscreen"></iframe>
 
 <script>
 const iframeWeb = document.getElementById('iframeWeb');
@@ -82,28 +82,28 @@ function openFullscreen() {
 // Funkcija za prikaz overview stranice
 function prikaziStranicu() {
   console.log("Prikazujem overview...");
-  youtubePlayer.classList.remove("show");
-  iframeWeb.classList.add("show");
+  youtubePlayer.classList.add('hidden');
+  iframeWeb.classList.remove('hidden');
 
   setTimeout(prikaziVideo, 15000); // 15 sekundi overview
 }
 
-// Funkcija za prikaz videa
+// Funkcija za prikaz YouTube videa
 function prikaziVideo() {
   console.log("Prikazujem video...");
-  iframeWeb.classList.remove("show");
-  youtubePlayer.classList.add("show");
+  iframeWeb.classList.add('hidden');
+  youtubePlayer.classList.remove('hidden');
 
   setTimeout(prikaziStranicu, 161000); // 2 min 41 sek video
 }
 
-// Start loop
+// Start loop funkcija
 function startLoop() {
   if (loopStarted) return;
   loopStarted = true;
 
   startButton.style.display = 'none'; // Sakrij gumb
-  iframeWeb.src = overviewURL;
+  iframeWeb.src = overviewURL; // Prebaci iframe na overview stranicu
   youtubePlayer.src = youtubeURL;
   prikaziStranicu();
 }
@@ -111,20 +111,12 @@ function startLoop() {
 // Kada se stranica učita
 window.onload = () => {
   openFullscreen();
-  
-  // Otvori login stranicu u novom tabu
-  window.open(loginURL, "_blank");
-  
-  // U iframe odmah postavi overview
-  iframeWeb.src = overviewURL;
 
-  // Postavi timeout za automatsko pokretanje nakon 2 minute (120000 ms)
-  setTimeout(() => {
-    startLoop();
-  }, 120000);
+  // U iframe odmah stavimo login stranicu
+  iframeWeb.src = loginURL;
 };
 
-// Ako korisnik klikne na gumb
+// Kada korisnik klikne na gumb
 startButton.onclick = () => {
   startLoop();
 };
@@ -132,6 +124,7 @@ startButton.onclick = () => {
 
 </body>
 </html>
+
 
 
 

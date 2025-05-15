@@ -12,8 +12,6 @@
       overflow: hidden;
       font-family: Arial, sans-serif;
       color: white;
-      text-align: center;
-      position: relative;
     }
     iframe {
       width: 100%;
@@ -24,14 +22,15 @@
       left: 0;
       transition: opacity 1s ease;
       opacity: 1;
+      z-index: 1; /* Iframe ispod gumba */
     }
     iframe.hidden {
       opacity: 0;
       pointer-events: none;
     }
     #startButton {
-      position: absolute;
-      bottom: 30px; /* Postavi gumb 30px iznad dna */
+      position: fixed;
+      bottom: 20px; /* 20px od dna */
       left: 50%;
       transform: translateX(-50%);
       font-size: 1.8rem;
@@ -40,7 +39,7 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      z-index: 10;
+      z-index: 10; /* Gumb iznad iframea */
     }
   </style>
 </head>
@@ -89,11 +88,11 @@ function prikaziStranicu() {
 function prikaziVideo() {
   iframeWeb.classList.add('hidden');
   youtubePlayer.classList.remove('hidden');
-  youtubePlayer.src = youtubeBaseURL; // Resetiraj svaki put da se klip pokrene ispočetka
-  setTimeout(prikaziStranicu, 161000); // 2 min 41 sek video
+  youtubePlayer.src = youtubeBaseURL; // Resetiraj YouTube svaki put
+  setTimeout(prikaziStranicu, 161000); // 2 min 41 sek
 }
 
-// Start loop funkcija
+// Start loop
 function startLoop() {
   if (loopStarted) return;
   loopStarted = true;
@@ -110,17 +109,15 @@ window.onload = () => {
 
   // U iframe odmah učitaj overview stranicu
   iframeWeb.src = overviewURL;
-
-  // YouTube iframe ostaje prazan do pokretanja
   youtubePlayer.src = "";
 
-  // Čekaj 2 minute prije automatskog starta ako korisnik ništa ne klikne
+  // Ako korisnik ništa ne klikne — auto start za 2 minute
   setTimeout(() => {
     startLoop();
   }, 120000);
 };
 
-// Ako korisnik klikne na gumb
+// Klikom na gumb
 startButton.onclick = () => {
   startLoop();
 };
@@ -128,6 +125,7 @@ startButton.onclick = () => {
 
 </body>
 </html>
+
 
 
 

@@ -21,7 +21,7 @@
       border: none;
       transition: opacity 1s ease;
       opacity: 1;
-      z-index: 1; /* iframe ispod gumba */
+      z-index: 1;
     }
     iframe.hidden {
       opacity: 0;
@@ -30,7 +30,7 @@
     #startButton {
       position: fixed;
       left: 50%;
-      bottom: 10px; /* 10px od dna */
+      bottom: 10px;
       transform: translateX(-50%);
       padding: 12px 25px;
       font-size: 1.5rem;
@@ -39,19 +39,15 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      z-index: 9999; /* iznad svega */
+      z-index: 9999;
     }
   </style>
 </head>
 <body>
 
-<!-- Iframe za IsolarCloud -->
 <iframe id="iframeWeb" src=""></iframe>
-
-<!-- Iframe za YouTube video -->
 <iframe id="youtubePlayer" class="hidden" src="" allow="autoplay; fullscreen"></iframe>
 
-<!-- Gumb za početak prezentacije -->
 <button id="startButton">✅ Logiran sam, pokreni prezentaciju!</button>
 
 <script>
@@ -59,7 +55,6 @@ const iframeWeb = document.getElementById('iframeWeb');
 const youtubePlayer = document.getElementById('youtubePlayer');
 const startButton = document.getElementById('startButton');
 
-// URL-ovi
 const overviewURL = "https://web3.isolarcloud.eu/#/plantDetail/overView?DHs9/Dq9q5mIsn8SXUbgAVKGzI9Dkwky0u7OofkIB2pCW6nJaN6/rU+67jQaGbAXczqyfkX+zf2W0UAi/djhyLGaoxyDzH2b6NDu+3osDB14cKfOoJRb2NmF824REHAe";
 const youtubeBaseURL = "https://www.youtube.com/embed/NjsWXKeq-LE?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NjsWXKeq-LE";
 
@@ -79,17 +74,27 @@ function openFullscreen() {
 
 // Funkcija za prikaz overview stranice
 function prikaziStranicu() {
+  console.log("Prikazujem IsolarCloud overview stranicu...");
+  
+  // svaki put ponovno učitaj overview URL da se resetira
+  iframeWeb.src = overviewURL;
+
   youtubePlayer.classList.add('hidden');
   iframeWeb.classList.remove('hidden');
-  setTimeout(prikaziVideo, 15000); // 15 sekundi overview
+
+  setTimeout(prikaziVideo, 15000); // 15 sekundi overview prikaz
 }
 
 // Funkcija za prikaz YouTube videa
 function prikaziVideo() {
+  console.log("Prikazujem YouTube video...");
   iframeWeb.classList.add('hidden');
   youtubePlayer.classList.remove('hidden');
-  youtubePlayer.src = youtubeBaseURL; // Resetiraj YouTube
-  setTimeout(prikaziStranicu, 161000); // 2 min 41 sek
+
+  // svaki put ponovno učitaj YouTube URL da se resetira video
+  youtubePlayer.src = youtubeBaseURL;
+
+  setTimeout(prikaziStranicu, 161000); // 2 min 41 sek video
 }
 
 // Start loop
@@ -98,18 +103,17 @@ function startLoop() {
   loopStarted = true;
 
   startButton.style.display = 'none'; // Sakrij gumb
-  iframeWeb.src = overviewURL;
-  youtubePlayer.src = youtubeBaseURL;
-  prikaziStranicu();
+  prikaziStranicu(); // Kreni s overview stranicom
 }
 
 // Kada se stranica učita
 window.onload = () => {
   openFullscreen();
 
-  iframeWeb.src = overviewURL;
+  iframeWeb.src = overviewURL; // inicijalno overview
   youtubePlayer.src = "";
 
+  // Čekaj 2 minute ako ništa ne klikneš
   setTimeout(() => {
     startLoop();
   }, 120000);
@@ -123,6 +127,7 @@ startButton.onclick = () => {
 
 </body>
 </html>
+
 
 
 

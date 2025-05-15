@@ -40,8 +40,8 @@
 const iframeWeb = document.getElementById('iframeWeb');
 const youtubePlayer = document.getElementById('youtubePlayer');
 
-// URL-ovi
-const loginURL = "https://isolarcloud.com/#/login";
+// Ispravni URL-ovi
+const loginURL = "https://web3.isolarcloud.eu/#/login";
 const overviewURL = "https://web3.isolarcloud.eu/#/plantDetail/overView?DHs9/Dq9q5mIsn8SXUbgAVKGzI9Dkwky0u7OofkIB2pCW6nJaN6/rU+67jQaGbAXczqyfkX+zf2W0UAi/djhyLGaoxyDzH2b6NDu+3osDB14cKfOoJRb2NmF824REHAe";
 const youtubeURL = "https://www.youtube.com/embed/NjsWXKeq-LE?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=NjsWXKeq-LE";
 
@@ -68,9 +68,9 @@ function prikaziStranicu() {
   setTimeout(prikaziVideo, 15000); // 15 sekundi overview
 }
 
-// Funkcija za prikaz videa
+// Funkcija za prikaz YouTube videa
 function prikaziVideo() {
-  console.log("Prikazujem video...");
+  console.log("Prikazujem YouTube video...");
   iframeWeb.classList.remove("show");
   youtubePlayer.classList.add("show");
 
@@ -94,7 +94,7 @@ window.onload = () => {
   // U iframe odmah postavi overview stranicu
   iframeWeb.src = overviewURL;
   
-  // Čekaj 15 sekundi da se login odradi
+  // Čekaj 15 sekundi da korisnik odradi login i automatski prebaci
   setTimeout(() => {
     startLoop();
   }, 15000);
@@ -103,4 +103,5 @@ window.onload = () => {
 
 </body>
 </html>
+
 

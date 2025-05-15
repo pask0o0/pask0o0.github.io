@@ -11,12 +11,6 @@
       background: black;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      position: relative;
-    }
-    #container {
-      position: relative;
-      height: 100%;
-      width: 100%;
     }
     iframe {
       position: absolute;
@@ -27,7 +21,7 @@
       border: none;
       transition: opacity 1s ease;
       opacity: 1;
-      z-index: 1;
+      z-index: 1; /* iframe ispod gumba */
     }
     iframe.hidden {
       opacity: 0;
@@ -35,31 +29,29 @@
     }
     #startButton {
       position: fixed;
-      bottom: 20px; /* pri dnu ekrana */
       left: 50%;
+      bottom: 10px; /* 10px od dna */
       transform: translateX(-50%);
-      padding: 15px 30px;
+      padding: 12px 25px;
       font-size: 1.5rem;
       background-color: #28a745;
-      border: none;
-      border-radius: 10px;
       color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      z-index: 9999; /* gumb iznad svega */
+      z-index: 9999; /* iznad svega */
     }
   </style>
 </head>
 <body>
 
-<div id="container">
-  <!-- Iframe za IsolarCloud -->
-  <iframe id="iframeWeb" src=""></iframe>
+<!-- Iframe za IsolarCloud -->
+<iframe id="iframeWeb" src=""></iframe>
 
-  <!-- Iframe za YouTube video -->
-  <iframe id="youtubePlayer" class="hidden" src="" allow="autoplay; fullscreen"></iframe>
-</div>
+<!-- Iframe za YouTube video -->
+<iframe id="youtubePlayer" class="hidden" src="" allow="autoplay; fullscreen"></iframe>
 
-<!-- Gumb za pokretanje prezentacije -->
+<!-- Gumb za početak prezentacije -->
 <button id="startButton">✅ Logiran sam, pokreni prezentaciju!</button>
 
 <script>
@@ -96,7 +88,7 @@ function prikaziStranicu() {
 function prikaziVideo() {
   iframeWeb.classList.add('hidden');
   youtubePlayer.classList.remove('hidden');
-  youtubePlayer.src = youtubeBaseURL; // Resetiraj video
+  youtubePlayer.src = youtubeBaseURL; // Resetiraj YouTube
   setTimeout(prikaziStranicu, 161000); // 2 min 41 sek
 }
 
